@@ -23,3 +23,4 @@ app.post("/todos", function (req, res) {
 	// отправляем простой объект
 	res.json({"message":"Вы размещаетеся на сервере!"});
 });
+
