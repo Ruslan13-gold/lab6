@@ -5,7 +5,7 @@ var express = require("express"),
 	UsersController = require("./controllers/users_controllers.js"),
 	app = express(); 
 
-http.createServer(app).listen(3000);
+http.createServer(app).listen(2000);
 
 app.use('/',express.static(__dirname + "/client"));
 app.use('/user/:username',express.static(__dirname + "/client"));

@@ -1,5 +1,3 @@
-// обратите внимание на то, что нужно перейти в папку, 
-// в которой находится каталог models
 var ToDo = require("../models/todo.js"),
 	ToDosController = {};
 

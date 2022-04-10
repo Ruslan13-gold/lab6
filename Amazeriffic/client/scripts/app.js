@@ -22,16 +22,33 @@ var organizeByTags = function (toDoObjects) {
 				toDosWithTag.push(toDo.description);
 			}
 		});
-		// мы связываем каждый тег с объектом, который // содержит название тега и массив
+		// мы связываем каждый тег с объектом, который содержит название тега и массив
 		return { "name": tag, "toDos": toDosWithTag };
 	});
 	return tagObjects;
 };
 
-var liaWithEditOrDeleteOnClick = function (todo) {
+var liaWithEditOrDeleteOnClick = function (todo, callback) {
 	var $todoListItem = $("<li>").text(todo.description),
 		$todoEditLink = $("<a>").attr("href", "todos/" + todo._id),
 		$todoRemoveLink = $("<a>").attr("href", "todos/" + todo._id);
+
+	$todoEditLink.addClass("linkEdit");
+	$todoRemoveLink.addClass("linkRemove");
+
+	$todoRemoveLink.text("Удалить");
+	$todoRemoveLink.on("click", function () {
+		$.ajax({
+			url: "/todos/" + todo._id,
+			type: "DELETE",
+		}).done(function (responde) {
+			callback();
+		}).fail(function (err) {
+			console.log("error on delete 'todo'!");
+		});
+		return false;
+	});
+	$todoListItem.append($todoRemoveLink);
 
 	$todoEditLink.text("Редактировать");
 	$todoEditLink.on("click", function() {
@@ -42,7 +59,7 @@ var liaWithEditOrDeleteOnClick = function (todo) {
 				"type": "PUT",
 				"data": { "description": newDescription },
 			}).done(function (responde) {
-				$(".tabs a:nth-child(2) span").trigger("click");
+				callback();
 			}).fail(function (err) {
 				console.log("Произошла ошибка: " + err);
 			});
@@ -51,64 +68,48 @@ var liaWithEditOrDeleteOnClick = function (todo) {
 	});
 	$todoListItem.append($todoEditLink);
 
-	$todoRemoveLink.text("Удалить");
-	$todoRemoveLink.on("click", function () {
-		$.ajax({
-			url: "/todos/" + todo._id,
-			type: "DELETE",
-		}).done(function (responde) {
-			$(".tabs a:first-child span").trigger("click");
-		}).fail(function (err) {
-			console.log("error on delete 'todo'!");
-		});
-		return false;
-	});
-	$todoListItem.append($todoRemoveLink);
 	return $todoListItem;
 }
 
 var main = function (toDoObjects) {
 	"use strict";
-	var toDos = toDoObjects.map(function (toDo) {
-		// просто возвращаем описание
-		// этой задачи
-		return toDo.description;
-	});
-	
-	// создание пустого массива с вкладками 
+	// создание пустого массива с вкладками
 	var tabs = [];
-
-	// добавляем вкладку Новые 
-	tabs.push({ 
-		"name":"Новые", 
-		"content":function (callback) {
+	// добавляем вкладку Новые
+	tabs.push({
+		"name": "Новые",
+		// создаем функцию content
+		// так, что она принимает обратный вызов
+		"content": function(callback) {
 			$.getJSON("todos.json", function (toDoObjects) {
 				var $content,
 					i;
 				$content = $("<ul>");
 				for (i = toDoObjects.length-1; i>=0; i--) {
-					var $todoListItem = liaWithEditOrDeleteOnClick(toDoObjects[i]);
+					var $todoListItem = liaWithEditOrDeleteOnClick(toDoObjects[i], function() {
+						$(".tabs a:first-child span").trigger("click");
+					});
 					$content.append($todoListItem);
 				}
-	   			// return $content;
-	   			callback(null,$content);
-   			}).fail(function (jqXHR, textStatus, error) {
-   				   // в этом случае мы отправляем ошибку вместе с null для $content
+				callback(null, $content);
+			}).fail(function (jqXHR, textStatus, error) {
 				callback(error, null);
-			});		
+			});
 		}
 	});
 
-	// добавляем вкладку Старые 
-	tabs.push({ 
-		"name":"Старые", 
-		"content":function (callback) {
+	// добавляем вкладку Старые
+	tabs.push({
+		"name": "Старые",
+		"content": function(callback) {
 			$.getJSON("todos.json", function (toDoObjects) {
 				var $content,
 					i;
 				$content = $("<ul>");
 				for (i = 0; i < toDoObjects.length; i++) {
-					var $todoListItem = liaWithEditOrDeleteOnClick(toDoObjects[i]);
+					var $todoListItem = liaWithEditOrDeleteOnClick(toDoObjects[i], function() {
+						$(".tabs a:nth-child(2) span").trigger("click");
+					});
 					$content.append($todoListItem);
 				}
 				callback(null, $content);
@@ -118,9 +119,9 @@ var main = function (toDoObjects) {
 		}
 	});
 
-	// добавляем вкладку Теги 
-	tabs.push({ 
-		"name":"Теги", 
+	// добавляем вкладку Теги
+	tabs.push({
+		"name": "Теги",
 		"content":function (callback) {
 			$.get("todos.json", function (toDoObjects) {	
 				// создание $content для Теги 
@@ -144,17 +145,17 @@ var main = function (toDoObjects) {
 		}
 	});
 
-	// Создаем вкладку Добавить 
-	tabs.push({ 
-		"name":"Добавить", 
+	// создаем вкладку Добавить
+	tabs.push({
+		"name": "Добавить",
 		"content":function () {
 			$.get("todos.json", function (toDoObjects) {	
 				// создание $content для Добавить 
 				var $input = $("<input>").addClass("description"), 
-					$textInput = $("<h5>").text("Введите новую задачу: "),
+					$textInput = $("<p>").text("Введите новую задачу: "),
 					$tagInput = $("<input>").addClass("tags"),
-					$tagLabel = $("<h5>").text("Тэги: "),
-					$button = $("<button>").text("Добавить");
+					$tagLabel = $("<p>").text("Тэги: "),
+					$button = $("<button>").text("+");
 				$("main .content").append($textInput).append($input).append($tagLabel).append($tagInput).append($button); 
 				function btnfunc() {
 					var description = $input.val(),
@@ -180,32 +181,29 @@ var main = function (toDoObjects) {
 	});
 
 	tabs.forEach(function (tab) {
-		var $aElement = $("<a>").attr("href",""), 
-			$spanElement = $("<span>").text(tab.name); 
+		var $aElement = $("<a>").attr("href",""),
+			$spanElement = $("<span>").text(tab.name);
 		$aElement.append($spanElement);
 		$("main .tabs").append($aElement);
 
 		$spanElement.on("click", function () {
 			var $content;
-			$(".tabs a span").removeClass("active"); 
+			$(".tabs a span").removeClass("active");
 			$spanElement.addClass("active");
 			$("main .content").empty();
-
 			tab.content(function (err, $content) {
-				if(err !== null ){
-					alert("Возникла проблема при обработке запроса: " + err);
+				if (err !== null) {
+					alert ("Возникла проблема при обработке запроса: " + err);
 				} else {
 					$("main .content").append($content);
-				}			
+				}
 			});
-
 			return false;
 		});
 	});
 
 	$(".tabs a:first-child span").trigger("click");
-
-};
+}
 
 $(document).ready(function() {
 	$.getJSON("todos.json", function (toDoObjects) {
