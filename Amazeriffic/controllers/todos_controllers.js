@@ -1,28 +1,52 @@
-var ToDo = require("../models/todo.js"),
+var ToDo = require("../models/ToDo.js"),
 	mongoose = require("mongoose");
 	ToDosController = {};
 
-ToDos ToDosController.index = function (req, res) { 
-	console.log("вызвано действие: индекс");
-	res.send(200);
+ToDosController.index = function (req, res) { 
+	console.log("Вызван ToDosController.index");
+	var username = req.params.username || null,
+		respondWithToDos;
+	respondWithToDos = function (query) { 
+		ToDo.find(query, function (err, toDos) {
+			if (err !== null) {
+				res.json(500, err);
+			} else {
+				res.status(200).json(toDos);
+			}
+		});
+	};
+	if (username !== null) {
+		console.log("Поиск пользователя: "+username);
+		User.find({"username": username}, function (err, result) {
+			if (err !== null) {
+				res.json(500, err);
+			} else if (result.length === 0) {
+				res.status(404).json({"result_length": 0});
+			} else {
+				respondWithToDos({"owner": result[0]._id});
+			}
+		});
+	} else {
+		respondWithToDos({});
+	}
 };
 
-ToDos ToDosController.create = function (req, res) {
+ToDosController.create = function (req, res) {
 	console.log("вызвано действие: создать");
 	res.send(200);
 };
 
-ToDos ToDosController.show = function (req, res) {
+ToDosController.show = function (req, res) {
 	console.log("вызвано действие: показать");
 	res.send(200);
 };
 
-ToDos ToDosController.destroy = function (req, res) {
+ToDosController.destroy = function (req, res) {
 	console.log("destroy action called");
 	res.send(200);
 }
 
-ToDos ToDosController.update = function (req, res) {
+ToDosController.update = function (req, res) {
 	console.log("вызвано действие: обновить");
 	res.send(200);
 }

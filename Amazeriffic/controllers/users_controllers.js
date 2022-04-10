@@ -1,3 +1,9 @@
+var User = require("../models/user.js"), 
+    ToDo = require("../models/ToDo.js"),
+	UsersController = {},
+	mongoose = require("mongoose");
+
+
 User.find({}, function (err, result) {
 	if (err !== null) {
 		console.log("Что-то идет не так");
@@ -17,36 +23,33 @@ User.find({}, function (err, result) {
 
 
 
-var User = require("../models/user.js"),
-	mongoose = require("mongoose");
-	var Users IDontroller = {};
 
-Users IDontroller.index = function (req, res) {
-	console.log("вызвано действие: индекс");
+UsersController.index = function (req, res) {
+	console.log('Вызвано действие: UsersController.index');
 	res.send(200);
 };
 
 // Отобразить пользователя
-Users IDontroller.show = function (req, res) {
-	console.log("вызвано действие: показать");
+UsersController.show = function (req, res) {
+	console.log("вызвано действие: показасть");
 	res.send(200);
 };
 
 // Создать нового пользователя
-Users IDontroller.create = function (req, res) {
+UsersController.create = function (req, res) {
 	console.log("вызвано действие: создать");
 	res.send(200);
 };
 
 // Обновить существующего пользователя
-Users IDontroller.update = function (req, res) {
+UsersController.update = function (req, res) {
 	console.log("вызвано действие: обновить");
 	res.send(200);
 };
 
 // Удалить существующего пользователя
-Users IDontroller.destroy = function (req, res) {
+UsersController.destroy = function (req, res) {
 	console.log("destroy action called");
 	res.send(200);
 };
-module.exports = Users IDontroller;
+module.exports = UsersController;
