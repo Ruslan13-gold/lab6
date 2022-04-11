@@ -23,7 +23,6 @@ mongoose.connect('mongodb://localhost/amazeriffic', {
 	console.log(Error, err.message);
 });
 
-
 app.get("/todos.json", ToDosController.index);
 app.get("/todos/:id", ToDosController.show); 
 app.post("/todos", ToDosController.create);
