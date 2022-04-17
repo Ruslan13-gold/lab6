@@ -1,30 +1,43 @@
 body {
-	background: #f9e933; 
-	font-family: 'Droid sans';
+	background: #1B95AB;
+	font-family: 'Exo 2', sans-serif;
 	font-size: 100%;
 }
 
 .title{
-	font-size: 120%;
+	font-family: 'Roboto Slab', serif;
+	font-size: 45px;
 	text-decoration: none;
 	float: left;
 	width: 570px;
-	font-size: 300%;
 	font-style: italic;
 	color: black;
 }
+
 .title:hover {
-	color: red;
+	color: #F29B29;
 	text-decoration: none;
+}
+
+.img__title{
+	padding-right: 10px;
+}
+
+#title__id{
+	text-align: right;
+	padding-left: 50px;
+}
+
+#title__id__list{
+	text-align: left;
 }
 
 a {
 	text-decoration: none;
-	color: red;
 }
+
 a:hover {
 	text-decoration: underline;
-	color: red;
 }
 
 h1, h2, h3, h4 {
@@ -42,38 +55,33 @@ header .container, aside .container, main .container, footer .container {
 
 main .authorization {
 	max-width: 1200px;
-	background: #ddd; 
-	/*padding-top: 10px; */
+	background: #ededed; 
 	margin: auto;
 	border-radius: 5px;
-	/*border-radius: 5px 5px 0 0; */
 }
 
 main .authorization p {
 	padding: 15px; 	
 	padding-bottom: 0px;
-	/*padding-left: 15px;*/
 	font-size:20px;
-	color: red;
 }
 
 main .authorization input {
-	font-family: Ubuntu;
 	margin: 10px; 
 	font-size:18px;
 	padding: 5px;
-	padding-right : 60px;
-	border: 2px solid black;
-	border-radius: 8px;
+	padding-right : 100px;
+    border-radius:10px;
+    border: 1px solid #919191;
+    transition: .3s border-color;
+}
+
+main .authorization input:hover{
+	border: 1px solid #aaa;
 }
 
 main .authorization button {
-	font-family: Ubuntu;
-	top: 50px;
-	left: 50px;  /*расстояние от края*/
     font-size: 18px;
-    border-radius: 8px;
-    border: 2px solid black;
     padding: 5px;
     margin: 10px; 
 	text-align: center; 
@@ -86,12 +94,13 @@ header {
 	margin-bottom: 3px;
 	padding: 10px;
 }
+
 header nav {
 	float: right;
-	/*width: 285px;*/
 	padding-top: 15px;
 	font-size: 20px;
 }
+
 aside {
 	background: white;
 	overflow: auto;
@@ -104,26 +113,32 @@ main {
 	overflow: auto;
 	padding: 20px;
 }
+
 main .main_block {
 	float: left;
 	width: 570px;
 }
+
 main .image {
 	float: right;	
 	width: 285px;
 }
+
 main .faq {
 	float: left;
 }
+
 main .faq p {
 	margin-top: 5px;
 	margin-bottom: 5px;
 }
+
 main h2 {
 	font-size: 120%;
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
+
 main h3 {
 	margin-top: 10px;
 	margin-bottom: 5px;	
@@ -139,19 +154,22 @@ footer {
 	padding: 10px;
 	font-size: 18px;
 }
+
 footer .contact {
-	float: left;
-	width: 570px;
+	display: flex;
+	padding-top: 10px;
+	font-size: 16px;
+	text-align: right;
+	font-family: 'Arimo', sans-serif;
+	justify-content: flex-end;
 }
-footer .sitemap {
-	float: right;	
-	width: 285px;
-}
+
 footer h5 {
 	padding-bottom: 10px;
 }
 
 .tabs a span {
+	color: #305982;
 	display: inline-block; 
 	border-radius: 10px 10px 0 0; 
 	width: 150px; 
@@ -160,8 +178,8 @@ footer h5 {
 	font-size:20px;
 	background: #ccc; 
 	padding: 10px;
-
 }
+
 .tabs a span.active { 
 	background: #ddd; 
 }
@@ -174,6 +192,7 @@ footer h5 {
 	background: white;
 	padding-bottom: 10px;
 }
+
 .content li{
 	list-style: none;
 	margin:  7px;
@@ -181,22 +200,28 @@ footer h5 {
 	font-size:20px;
 	border: right;
 	padding: 0 0 5px 0;
-	/*box-shadow: 0 0 0 7px #ddd;*/
 	border-bottom: 3px solid black;
 }
+
 .content p {
 	padding: 15px; 	
 	font-size:20px;
-	color: red;
 }
+
 .content input {
 	width: 1160px;
 	margin: 10px;
 	padding: 10px;
 	font-size:  20px;
-	box-shadow: 0 0 0 5px #ddd;
-	border-radius: 12px;
+    border-radius:10px;
+    border: 1px solid #919191;
+    transition: .3s border-color;
 }
+
+.content input:hover {
+  border: 1px solid #aaa;
+}
+
 .content h3 {
 	padding: 5px 5px 0 5px;
 	text-transform: uppercase;
@@ -210,40 +235,96 @@ main .content h5{
 	padding: 10px 0px 0px 5px;
 }
 
-.content button {
-	color: red;
-	font-size: 20px;
-	margin: 10px;
-	margin-top: 15px;
-	width: 20%;
-	padding: 10px;
-	background: #ddd;
-	box-shadow: 0 0 0 3px #ccc;
-	border-radius: 12px;
-	transition: 0.2s;
-}
-
-.content button:hover{
-	background-color: rgba(249, 233, 51, 0.8);
-}
-
 .linkEdit {
 	color: black;
 	display: inline-block;
 	float: right;
 	padding-left: 15px; 
 }
+
 .linkEdit:hover {
 	color: red;
 	text-decoration: none;
 } 
+
 .linkRemove {
 	color: black;
 	display: inline-block;
 	float: right;
 	padding-left: 15px; 
 }
+
 .linkRemove:hover {
 	color: red;
 	text-decoration: none;
 } 
+
+button {
+  appearance: none;
+  background-color: #FAFBFC;
+  border: 1px solid rgba(27, 31, 35, 0.15);
+  border-radius: 6px;
+  box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0, rgba(255, 255, 255, 0.25) 0 1px 0 inset;
+  box-sizing: border-box;
+  color: #24292E;
+  cursor: pointer;
+  display: inline-block;
+  font-family: 'Arimo', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  list-style: none;
+  padding: 6px 16px;
+  position: relative;
+  transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+  white-space: nowrap;
+  word-wrap: break-word;
+}
+
+button:hover {
+  background-color: #F3F4F6;
+  text-decoration: none;
+  transition-duration: 0.1s;
+}
+
+button:disabled {
+  background-color: #FAFBFC;
+  border-color: rgba(27, 31, 35, 0.15);
+  color: #959DA5;
+  cursor: default;
+}
+
+button:active {
+  background-color: #EDEFF2;
+  box-shadow: rgba(225, 228, 232, 0.2) 0 1px 0 inset;
+  transition: none 0s;
+}
+
+button:focus {
+  outline: 1px transparent;
+}
+
+button:before {
+  display: none;
+}
+
+button:-webkit-details-marker {
+  display: none;
+}
+
+#btn__add{
+	font-size: 20px;
+}
+
+#btn__exit{
+	color: #305982;	
+}
+
+#btn__exit:hover{
+	text-decoration: none;
+	color: red;	
+}

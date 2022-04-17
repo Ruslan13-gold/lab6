@@ -153,7 +153,7 @@ var main = function (toDoObjects) {
 					$input = $("<input>").addClass("description"), 
 					$textTag = $("<h5>").text("Тэги: "),
 					$tagInput = $("<input>").addClass("tags"),
-					$button = $("<button>").text("Добавить"),
+					$button = $("<button id='btn__add'>").text("Добавить"),
 					$content1 = $("<ul>"), $content2 = $("<ul>");
 
 				$content1.append($input);
