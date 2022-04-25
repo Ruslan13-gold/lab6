@@ -2,11 +2,10 @@ var ToDo = require("../models/ToDo.js"),
 	User = require("../models/user.js"),
 	ToDosController = {};
 
-ToDosController.index = function (req, res) { 
-	console.log("Вызван ToDosController.index");
+ToDosController.index = function (req, res) {
 	var username = req.params.username || null,
 		respondWithToDos;
-	respondWithToDos = function (query) { 
+	respondWithToDos = function (query) {
 		ToDo.find(query, function (err, toDos) {
 			if (err !== null) {
 				res.json(500, err);
@@ -16,17 +15,17 @@ ToDosController.index = function (req, res) {
 		});
 	};
 	if (username !== null) {
-		console.log("Поиск пользователя: "+username);
 		User.find({"username": username}, function (err, result) {
 			if (err !== null) {
 				res.json(500, err);
 			} else if (result.length === 0) {
-				res.status(404).json({"result_length": 0});
+				res.status(404).json({"result_length" : 0});
 			} else {
 				respondWithToDos({"owner": result[0]._id});
 			}
 		});
-	} else {
+	} 
+	else {
 		respondWithToDos({});
 	}
 };
@@ -35,12 +34,11 @@ ToDosController.create = function (req, res) {
 	var username = req.params.username || null;
 	var newToDo = new ToDo({
 		"description": req.body.description,
-		"tags": req.body.tags
+		"tags": req.body.tags,
+		"status" : req.body.status
 	});
 
-	console.log("username: " + username);
-
-	User.find({"username": username}, function (err, result) {
+	User.find({"modername": username}, function (err, result) {
 		if (err) {
 			res.send(500);
 		} else {
@@ -100,7 +98,7 @@ ToDosController.destroy = function (req, res) {
 
 ToDosController.update = function (req, res) {
 	var id = req.params.id;
-	var newDescription = {$set: {description: req.body.description}};
+	var newDescription = {$set: {description: req.body.description, status: req.body.status}};
 	ToDo.updateOne({"_id": id}, newDescription, function (err,todo) {
 		if (err !== null) {
 			res.status(500).json(err);

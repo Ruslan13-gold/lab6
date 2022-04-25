@@ -2,9 +2,8 @@ var main = function (UsersObjects) {
 	"use strict";
 	var $input = $("<input>").addClass("username"),
 		$butRegister = $("<button>").text("Создать аккаунт"),
-		$butLogin = $("<button>").text("Войти в аккаунт"),
-		$butEdit = $("<button>").text(" Изменить имя пользователя"),
-		$butDestroy = $("<button>").text("Удалить пользователя");
+		$butLogin = $("<button>").text("Войти в аккаунт");	
+		// $butDestroy = $("<button>").text("Удалить пользователя");
 
 	$butRegister.on("click", function() {
 		var username = $input.val();
@@ -45,52 +44,29 @@ var main = function (UsersObjects) {
 		}
 	});
 
-	$butEdit.on("click", function() {
-		if ($input.val() !== "") {
-			if ($input.val() !== null && $input.val().trim() !== "") {
-				var username = $input.val();
-				var newUsername = prompt("Введите новое имя пользователя", $input.val());
-				if (newUsername !== null && newUsername.trim() !== "") {
-					$.ajax({
-						'url': '/users/'+username,
-						'type': 'PUT',
-						'data': { 'username': newUsername }
-					}).done(function(responde) {
-						console.log(responde);
-						$input.val(newUsername);
-						alert('Имя пользователя успешно изменено');
-					}).fail(function(jqXHR, textStatus, error) {
-						console.log(error);
-						alert("Произошла ошибка!\n"+jqXHR.status + " " + jqXHR.textStatus);	
-					});
-				}
-			}
-		}
-	});
+	// $butDestroy.on("click", function() {
+	// 	if ($input.val() !== "") {
+	// 		if ($input.val() !== null && $input.val().trim() !== "") {
+	// 			var username = $input.val();
+	// 			if (confirm("Вы уверены, что хотете удалить пользователя " + username + "?")) {
+	// 				$.ajax({
+	// 					'url': '/users/'+username,
+	// 					'type': 'DELETE',
+	// 				}).done(function(responde) {
+	// 					console.log(responde);
+	// 					$input.val("");
+	// 					alert('Пользователь успешно удален');
+	// 				}).fail(function(jqXHR, textStatus, error) {
+	// 					console.log(error);
+	// 					alert("Произошла ошибка!\n"+jqXHR.status + " " + jqXHR.textStatus);	
+	// 				});
+	// 			}
+	// 		}
+	// 	}
+	// });
 
-	$butDestroy.on("click", function() {
-		if ($input.val() !== "") {
-			if ($input.val() !== null && $input.val().trim() !== "") {
-				var username = $input.val();
-				if (confirm("Вы уверены, что хотете удалить пользователя " + username + "?")) {
-					$.ajax({
-						'url': '/users/'+username,
-						'type': 'DELETE',
-					}).done(function(responde) {
-						console.log(responde);
-						$input.val("");
-						alert('Пользователь успешно удален');
-					}).fail(function(jqXHR, textStatus, error) {
-						console.log(error);
-						alert("Произошла ошибка!\n"+jqXHR.status + " " + jqXHR.textStatus);	
-					});
-				}
-			}
-		}
-	});
 	$("main .authorization").append($input);
-	$("main .authorization").append($butDestroy);
-	$("main .authorization").append($butEdit);
+	// $("main .authorization").append($butDestroy);
 	$("main .authorization").append($butLogin);
 	$("main .authorization").append($butRegister);
 }

@@ -3,20 +3,25 @@ var express = require("express"),
 	mongoose = require("mongoose"),
 	ToDosController = require("./controllers/todos_controllers.js"),
 	UsersController = require("./controllers/users_controllers.js"),
+	ModerController = require("./controllers/moder_controllers.js"),
+	AllUsersControllers = require("./controllers/all_users_controllers.js"),
+	UsersAndAdminToDosController = require("./controllers/admin_todos_controllers.js"),
+	AdminController = require("./controllers/admin_controllers.js"),
 	app = express(); 
 
 http.createServer(app).listen(3000);
 
 app.use('/',express.static(__dirname + "/client"));
 app.use('/user/:username',express.static(__dirname + "/client"));
+// app.use('/moder/:modername',express.static(__dirname + "/client"));
 
 // командуем Express принять поступающие объекты JSON
 app.use(express.urlencoded({ extended: true }));
 
 // подключаемся к хранилищу данных Amazeriffic в Mongo
 mongoose.connect('mongodb://localhost/amazeriffic', {
-		useNewUrlParser: true,
-		useUnifiedTopology: true 
+	useNewUrlParser: true,
+	useUnifiedTopology: true 
 }).then(res => {
 	console.log("DB Connected!")
 }).catch(err => {
@@ -29,13 +34,31 @@ app.post("/todos", ToDosController.create);
 app.put("/todos/:id", ToDosController.update);
 app.delete("/todos/:id", ToDosController.destroy);
 
+app.get("/admins.json", AdminController.index); 
+app.post("/admins", AdminController.create);
+app.get("/admins/:adminname", AdminController.show);
+
+app.get("/admins/:adminname/users.json", UsersAndAdminToDosController.index);
+app.put("/admins/:username", UsersAndAdminToDosController.update);
+app.delete("/admins/:username", UsersAndAdminToDosController.destroy);
+
+app.get("/users/:username/todos.json", AllUsersControllers.index);
 app.get("/users/:username/todos.json", ToDosController.index);
 app.post("/users/:username/todos", ToDosController.create);
 app.put("/users/:username/todos/:id", ToDosController.update);
 app.delete("/users/:username/todos/:id", ToDosController.destroy);
 
 app.get("/users.json", UsersController.index); 
-app.post("/users", UsersController.create); 
+app.post("/users", UsersController.create);
 app.get("/users/:username", UsersController.show);
-app.put("/users/:username", UsersController.update);
 app.delete("/users/:username", UsersController.destroy);
+
+app.get("/moders.json", ModerController.index); 
+app.post("/moders", ModerController.create);
+app.get("/moders/:modername", ModerController.show);
+
+app.get("/moders/:modername/todos.json", ToDosController.index);
+app.post("/moders/:modername/todos", ToDosController.create);
+app.put("/moders/:modername/todos/", ToDosController.update);
+app.delete("/moders/:modername/todos/", ToDosController.destroy);
+

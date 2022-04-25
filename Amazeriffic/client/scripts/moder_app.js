@@ -67,7 +67,6 @@ var liaWithEditOrDeleteOnClick = function (todo, callback) {
 		return false;
 	});
 	$todoListItem.append($todoEditLink);
-
 	return $todoListItem;
 }
 
@@ -77,7 +76,7 @@ var main = function (toDoObjects) {
 	var tabs = [];
 	// добавляем вкладку Новые
 	tabs.push({
-		"name": "Новые",
+		"name": "Каталог",
 		// создаем функцию content
 		// так, что она принимает обратный вызов
 		"content": function(callback) {
@@ -96,56 +95,9 @@ var main = function (toDoObjects) {
 		}
 	});
 
-	// добавляем вкладку Старые
-	tabs.push({
-		"name": "Старые",
-		"content": function(callback) {
-			$.getJSON("todos.json", function (toDoObjects) {
-				var $content,
-					i;
-				$content = $("<ul>");
-				for (i = 0; i < toDoObjects.length; i++) {
-					var $todoListItem = liaWithEditOrDeleteOnClick(toDoObjects[i], function() {
-						$(".tabs a:nth-child(2) span").trigger("click");
-					});
-					$content.append($todoListItem);
-				}
-				callback(null, $content);
-			}).fail(function(jqXHR, textStatus, error) {
-				callback(error, null);
-			});
-		}
-	});
-
-	// добавляем вкладку Теги
-	tabs.push({
-		"name": "Теги",
-		"content":function (callback) {
-			$.get("todos.json", function (toDoObjects) {	
-				// создание $content для Теги 
-				var organizedByTag = organizeByTags(toDoObjects),
-					$content;
-				organizedByTag.forEach(function (tag) {
-					var $tagName = $("<h3>").text(tag.name);
-						$content = $("<ul>");
-					tag.toDos.forEach(function (description) {
-						var $li = $("<li>").text(description);
-						$content.append($li);
-					});
-					$("main .content").append($tagName);
-					$("main .content").append($content);
-				});
-				callback(null,$content);
-			}).fail(function (jqXHR, textStatus, error) {
-				// в этом случае мы отправляем ошибку вместе с null для $content
-				callback(error, null);
-			});
-		}
-	});
-
 	// создаем вкладку Добавить
 	tabs.push({
-		"name": "Добавить",
+		"name": "Добавление в каталог",
 		"content":function () {
 			$.get("todos.json", function (toDoObjects) {	
 				// создание $content для Добавить 
@@ -209,7 +161,6 @@ var main = function (toDoObjects) {
 			return false;
 		});
 	});
-
 	$(".tabs a:first-child span").trigger("click");
 }
 
