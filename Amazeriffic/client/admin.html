@@ -11,6 +11,10 @@
 		<link href="https://fonts.googleapis.com/css2?family=Arimo&display=swap" rel="stylesheet">
 		<script src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
 		<script type="text/javascript" src="/scripts/admins.js"></script>
+		<style type="text/css">
+			#admin_tabs{ padding-top: 10px; }
+			#admin_tabs a span{ background-color: white; color: black; font-size: 22px; font-weight: bold; }
+		</style>
 	</head>
 
 	<body> 
@@ -22,14 +26,17 @@
 		</header>
 		<main>
 			<div class="authorization">
-				<p>Введите имя администратора</p>
+			</div>
+			<div class="container">
+				<div class="tabs" id="admin_tabs"></div>
+				<div class="content"></div>
 			</div>
 		</main>
 		<footer>
 			<div class="container">
 				<div class="contact"> 
 					<div>
-						<p>Вы находитесь на странице администратора</p>
+						<p id="admin_moder">Вы находитесь на странице администратора</p>
 					</div> 
 				</div>
 			</div>

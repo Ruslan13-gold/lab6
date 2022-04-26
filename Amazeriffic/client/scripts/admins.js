@@ -1,55 +1,59 @@
-var main = function (AdminsObjects) {
-	"use strict";
-	var $input = $("<input>").addClass("username"),
-		$butRegister = $("<button>").text("Создать аккаунт"),
-		$butLogin = $("<button>").text("Войти в аккаунт");
+var liaWithEditOrDeleteOnClick = function (user, callback) {
+	var $userListItem = $("<li>").text(user.username); return $userListItem; }
 
-	$butRegister.on("click", function() {
-		var adminname = $input.val();
-		if (adminname !== null && adminname.trim() !== "") {
-			var newAdmin = {"adminname": adminname};
-			$.post("admins", newAdmin, function(result) {
-				console.log(result);
-				// отправляем на клиент
-				AdminsObjects.push(newAdmin);
-			}).done(function(responde) {
-				console.log(responde);
-				alert('Аккаунт успешно создан!\nНажмите "Войти", чтобы продолжить')
-			}).fail(function(jqXHR, textStatus, error) {
-				console.log(error);
-				if (jqXHR.status === 501) {
-					alert("Такой пользователь уже существует!\nИзмените логин и повторите "
-						+ "попытку");
-				} else {					
-					alert("Произошла ошибка!\n"+jqXHR.status + " " + jqXHR.textStatus);	
+var main = function (UsersObjects) { "use strict";
+	var $input = $("<input>").addClass("username"),	
+		$butDestroy = $("<button>").text("Удалить пользователя");
+
+	$butDestroy.on("click", function() {
+		if ($input.val() !== "") {
+			if ($input.val() !== null && $input.val().trim() !== "") {
+				var username = $input.val();
+				if (confirm("Вы уверены, что хотете удалить пользователя " + username + "?")) {
+					$.ajax({ 'url': '/users/'+username, 'type': 'DELETE',
+					}).done(function(responde) { console.log(responde); $input.val("");
+						alert('Пользователь успешно удален');
+					}).fail(function(jqXHR, textStatus, error) { console.log(error);
+						alert("Произошла ошибка!\n"+jqXHR.status + " " + jqXHR.textStatus);	
+					});
 				}
-			});
+			}
+		}
+	});
+	$("main .authorization").append($input); $("main .authorization").append($butDestroy);
+	var tabs = [];
+	tabs.push({ "name": "Список пользователей",
+		"content": function(callback) {
+			$.getJSON("users.json", function (UsersObjects) {
+				var $content = $("<ul>");
+				for (var i = UsersObjects.length-1; i>=0; i--) {
+					var $userListItem = liaWithEditOrDeleteOnClick(UsersObjects[i], function() {
+						$(".tabs a:first-child span").trigger("click"); });
+					$content.append($userListItem); }
+				callback(null, $content);
+			}).fail(function (jqXHR, textStatus, error) { callback(error, null); });
 		}
 	});
 
-	$butLogin.on("click", function() {
-		var adminname = $input.val();
-		if (adminname !== null && adminname.trim() !== "") {
-			var loginAdmin = {"adminname": adminname};
-			$.ajax({
-				'url': '/admins/'+adminname,
-				'type': 'GET'
-			}).done(function(responde) {
-				window.location.replace('admins/' + adminname + '/');
-			}).fail(function(jqXHR, textStatus, error) {
-				console.log(error);
-				alert("Произошла ошибка!\n"+jqXHR.status + " " + jqXHR.textStatus);	
+	tabs.forEach(function (tab) {
+		var $aElement = $("<a>").attr("href",""), $spanElement = $("<span>").text(tab.name);
+		$aElement.append($spanElement);
+		$("main .tabs").append($aElement);
+		$spanElement.on("click", function () { var $content;
+			$(".tabs a span").removeClass("active");
+			$spanElement.addClass("active");
+			$("main .content").empty();
+			tab.content(function (err, $content) {
+				if (err !== null) {
+					alert ("Возникла проблема при обработке запроса: " + err);
+				} else { $("main .content").append($content); }
 			});
-		}
+			return false;
+		});
 	});
-
-	$("main .authorization").append($input);
-	$("main .authorization").append($butLogin);
-	$("main .authorization").append($butRegister);
+	$(".tabs a:first-child span").trigger("click");
 }
 
 $(document).ready(function() {
-	$.getJSON("admins.json", function (AdminsObjects) {
-		main(AdminsObjects);
-	});
+	$.getJSON("users.json", function (UsersObjects) { main(UsersObjects); });
 });

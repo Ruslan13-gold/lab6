@@ -1,13 +1,4 @@
-var mongoose = require("mongoose"),
-	ObjectId = mongoose.Schema.Types.ObjectId;
-	
-// Это модель mongoose для списка задач
+var mongoose = require("mongoose"), ObjectId = mongoose.Schema.Types.ObjectId;
 var ToDoSchema = mongoose.Schema({
-	description: String,
-	tags: [ String ],
-	status : String,
-	owner : { type: ObjectId, ref: "User" }
-});
-
-var ToDo = mongoose.model("ToDo", ToDoSchema); 
-module.exports = ToDo;
+	description: String, tags: [ String ], owner : { type: ObjectId, ref: "User" } });
+var ToDo = mongoose.model("ToDo", ToDoSchema); module.exports = ToDo;
